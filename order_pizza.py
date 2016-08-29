@@ -13,7 +13,7 @@ my_pizzas = []
 
 def display_invalid_option(menu_selection):
 	if menu_selection.isdigit():
-		print("\nI don't want anything but 0-4, foo. ".format(menu_selection))
+		print("\nI don't want anything out of range, foo. ".format(menu_selection))
 	else:
 		print("\nI want all the digits, foo. Try again. ".format(menu_selection))
 
@@ -24,18 +24,18 @@ def is_valid_pizza(pizza_selection, pizzas): #question on VARIABLES - pizzas & P
 def display_pizzas(pizzas):
 	if len(pizzas) > 0:
 		for index, pizza in enumerate(pizzas):
-			print("{}: {} - cost: {}".format(index+1, pizza["name"], pizza["cost"]))
+			print("{}: {} - cost: ${:,.2f}".format(index+1, pizza["name"], pizza["cost"]))
 	else:
 		print("WHOA!!?\nNo pizzas added, yet.")
 
 def display_total_cost(pizzas): #question on LIST COMPREHENSIONS
 	total_cost = sum([pizza["cost"] for pizza in pizzas])
 	print("----------")
-	print("total cost: {}".format(total_cost))
+	print("total cost: ${:,.2f}".format(total_cost))
 
-def display_order(my_pizzas):
-	display_pizzas(my_pizzas)
-	display_total_cost(my_pizzas)
+def display_order(pizzas):
+	display_pizzas(pizzas)
+	display_total_cost(pizzas)
 	print("\n")
 
 def order_pizza(pizzas):
@@ -64,6 +64,25 @@ def add_to_order():
 		else:
 			display_invalid_option(pizza_selection)
 
+def remove_from_order():
+	"""
+	remove a pizza from my_pizzas based on user's input
+	"""
+	while True:
+		print("\n")
+		display_pizzas(my_pizzas)
+		print("0: Go Back")
+
+		pizza_selection = input("\nWhich pizza do ya wanna remove, foo? ")
+
+		if pizza_selection == "0":
+			break
+		elif is_valid_pizza(pizza_selection, my_pizzas):
+			del (my_pizzas[int(pizza_selection)-1])
+		else:
+			display_invalid_option(pizza_selection)
+
+
 def main():
 	global my_pizzas
 	MENU_ITEMS = (
@@ -85,7 +104,7 @@ def main():
 		elif menu_selection == "1":
 			add_to_order()
 		elif menu_selection == "2":
-			pass
+			remove_from_order()
 		elif menu_selection == "3":
 			display_order(my_pizzas)
 			print("\n")
