@@ -9,6 +9,8 @@ PIZZAS = (
 	},
 )
 
+my_pizzas = []
+
 def display_invalid_option(menu_selection):
 	if menu_selection.isdigit():
 		print("\nI don't want anything but 0-4, foo. ".format(menu_selection))
@@ -16,18 +18,41 @@ def display_invalid_option(menu_selection):
 		print("\nI want all the digits, foo. Try again. ".format(menu_selection))
 
 
-def is_valid_pizza(pizza_selection, pizzas): #question on pizzas & PIZZAS
+def is_valid_pizza(pizza_selection, pizzas): #question on VARIABLES - pizzas & PIZZAS
 		return pizza_selection.isdigit() and int(pizza_selection)-1 < len(pizzas)
+
+def display_pizzas(pizzas):
+	if len(pizzas) > 0:
+		for index, pizza in enumerate(pizzas):
+			print("{}: {} - cost: {}".format(index+1, pizza["name"], pizza["cost"]))
+	else:
+		print("WHOA!!?\nNo pizzas added, yet.")
+
+def display_total_cost(pizzas): #question on LIST COMPREHENSIONS
+	total_cost = sum([pizza["cost"] for pizza in pizzas])
+	print("----------")
+	print("total cost: {}".format(total_cost))
+
+def display_order(my_pizzas):
+	display_pizzas(my_pizzas)
+	display_total_cost(my_pizzas)
+	print("\n")
+
+def order_pizza(pizzas):
+	if len(my_pizzas) > 0:
+		print("Thanx, foo.")
+		return True
+	else:
+		print("Add a pizza, foo.")
+		return False
 
 def add_to_order():
 	"""
 	prompts for adding pizza to the order
 	"""
-
 	while True:
 		print("\n")
-		for index, pizza in enumerate(PIZZAS):
-			print("{}: {}".format(index+1, pizza["name"]))
+		display_pizzas(PIZZAS)
 		print("0: Go Back")
 
 		pizza_selection = input("\nWhich pizza, foo? ")
@@ -35,11 +60,12 @@ def add_to_order():
 		if pizza_selection == "0":
 			break
 		elif is_valid_pizza(pizza_selection, PIZZAS):
-			my_pizzas.append(PIZZAS[int(pizza_selection) - 1])
+			my_pizzas.append(PIZZAS[int(pizza_selection)-1])
 		else:
 			display_invalid_option(pizza_selection)
 
 def main():
+	global my_pizzas
 	MENU_ITEMS = (
 		"1: add pizza to order",
 		"2: remove pizza from order",
@@ -61,11 +87,14 @@ def main():
 		elif menu_selection == "2":
 			pass
 		elif menu_selection == "3":
-			pass
+			display_order(my_pizzas)
+			print("\n")
 		elif menu_selection == "4":
-			pass
+			display_order(my_pizzas)
+			if order_pizza(my_pizzas):
+				my_pizzas = []
 		else:
 			display_invalid_option(menu_selection)
 
-if __name__ == "__main__":
+if __name__ == "__main__": #question on what __name__ actually is doing
 	main()
